@@ -2,3 +2,6 @@ baseURL = 'https://keitaroyam.github.io'
 languageCode = 'ja-jp'
 title = 'yam note'
 theme = 'PaperMod'
+
+[permalinks]
+posts = "/:year/:month:/:day/:filename/"
