@@ -4,4 +4,4 @@ title = 'yam note'
 theme = 'PaperMod'
 
 [permalinks]
-posts = "/:year/:month:/:day/:filename/"
+posts = "/posts/:year/:month:/:day/:filename/"
