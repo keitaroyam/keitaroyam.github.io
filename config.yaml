@@ -1,0 +1,28 @@
+baseURL: 'https://keitaroyam.github.io'
+languageCode: 'ja-jp'
+title: 'yam note'
+theme: 'PaperMod'
+
+permalinks:
+    posts: "/posts/:year/:month:/:day/:filename/"
+
+outputs:
+    home:
+        - HTML
+        - RSS
+        - JSON
+
+menu:
+  main:
+#   - identifier: categories
+#     name: categories
+#     url: /categories/
+#     weight: 10
+    - identifier: tags
+      name: tags
+      url: /tags/
+      weight: 20
+    - identifier: search
+      name: search
+      url: /search/
+      weight: 20
