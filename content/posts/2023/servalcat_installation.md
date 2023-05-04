@@ -2,6 +2,7 @@
 title: "Servalcatのインストール"
 date: 2023-05-01T22:54:16+01:00
 draft: false
+tags: [servalcat]
 ---
 
 [Servalcat](https://github.com/keitaroyam/servalcat) 0.4.6からC++コードを含むようになり，少々配布方法が複雑になってしまった．
