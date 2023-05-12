@@ -2,13 +2,17 @@
 title: "Cootを使った核酸モデリングのtips"
 date: 2023-05-12T19:58:59+01:00
 tags: [coot]
+ShowToc: true
 ---
 
 順次追記予定
 
+注: 現在最新版のCoot 0.9.8.7 (CCP4 8.0.008-11)は核酸-タンパク複合体の精密化に深刻なバグあり．0.9.8.6は核酸単体でもダメです．核酸を含む精密化をやるときは0.9.8.5を使ってください（ただしこのバージョンは糖鎖がダメです）．
+
 ## base pair & stacking restraints
-CCP4に含まれているプログラムLibGで作製したrestraintをCootに読ませて使うことができる．
-LibGの文献は以下を参照
+### LIBGを使う
+CCP4に含まれているプログラムLIBGで作製したrestraintをCootに読ませて使うことができる．
+LIBGの文献は以下を参照
 1. Brown et al. "Tools for macromolecular model building and refinement into electron cryo-microscopy reconstructions" [Acta Cryst. (2015). D71, 136-153](https://doi.org/10.1107/S1399004714021683)
 2. Kovalevskiy et al. "Overview of refinement procedures within REFMAC5: utilizing data from different sources" [Acta Cryst. (2018). D74, 215-227](https://doi.org/10.1107/S2059798318000979)
 
@@ -48,5 +52,20 @@ exte stac plan 1  firs resi 10 ins . chai C atoms { C1' N9 C8 N7 C5 C6 O6 N1 C2 
 add_refmac_extra_restraints(imol, "libg.txt")
 ```
 
-塩基対が崩れすぎている場合，libgが認識してくれない可能性がある．
+塩基対が崩れすぎている場合，LIBGが認識してくれない可能性がある．
 その場合はIdeal RNA (or DNA)から置き直したほうが早いかも
+
+### 手動で組ませる
+
+1. Calculate - Modules - Restraints でRestraintsメニューを出現させる
+2. Restraints - RNA A form bond restraints または DNA B form bond restraints を選択
+3. 塩基対を組ませたい残基を1つずつクリック (計2回)
+
+紛らわしい名前をしているが，[ソース](https://github.com/pemsley/coot/blob/cffbb2e5262899b2fcfd1f6858ba7be36c396d0d/python/user_define_restraints.py#L167)を読む限り，塩基の原子間距離の制約を設定しているだけなので，A formやB formになるわけではない．
+
+## 二重らせんのフィッティング
+TBA
+
+## フラグメントのフィッティング
+
+RNA FRABASE http://rnafrabase.cs.put.poznan.pl/ で配列や二次構造でフラグメントの3次元座標が検索できる．低分解能のマップに結構ぴったりはまってくれたりして嬉しい
