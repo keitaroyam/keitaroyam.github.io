@@ -11,8 +11,10 @@ Twilogの停止により，twitterに有用なメモを残していくことが�
 テーマにはPaperModを選択．カスタマイズメモ
 
 1. [Search page](https://adityatelange.github.io/hugo-PaperMod/posts/papermod/papermod-features/#search-page)
-1. [Add menu to site](https://adityatelange.github.io/hugo-PaperMod/posts/papermod/papermod-faq/#add-menu-to-site)
-2. [Math typesetting](https://adityatelange.github.io/hugo-PaperMod/posts/math-typesetting/)
+2. [Add menu to site](https://adityatelange.github.io/hugo-PaperMod/posts/papermod/papermod-faq/#add-menu-to-site)
+3. [Math typesetting](https://adityatelange.github.io/hugo-PaperMod/posts/math-typesetting/)
+4. [Use Lastmod with PaperMod](https://www.jacksonlucky.net/posts/use-lastmod-with-papermod/)
+5. [Shortcodes](https://gohugo.io/content-management/shortcodes/) (tweetやyoutubeの埋め込み方)
 
 数式のテスト:
 $$

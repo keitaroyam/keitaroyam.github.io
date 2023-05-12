@@ -2,6 +2,7 @@ baseURL: 'https://keitaroyam.github.io'
 languageCode: 'ja-jp'
 title: 'yam note'
 theme: 'PaperMod'
+enableGitInfo: true
 
 permalinks:
     posts: "/posts/:year/:month:/:day/:filename/"
