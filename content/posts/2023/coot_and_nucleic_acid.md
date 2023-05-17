@@ -53,15 +53,80 @@ add_refmac_extra_restraints(imol, "libg.txt")
 ```
 
 塩基対が崩れすぎている場合，LIBGが認識してくれない可能性がある．
-その場合はIdeal RNA (or DNA)から置き直したほうが早いかも
+その場合は以下の方法で手動で設定できるが，Ideal RNA (or DNA)から置き直したほうが早いかも
 
-### 手動で組ませる
+### 手動で設定する
+
+塩基対は，
 
 1. Calculate - Modules - Restraints でRestraintsメニューを出現させる
 2. Restraints - RNA A form bond restraints または DNA B form bond restraints を選択
 3. 塩基対を組ませたい残基を1つずつクリック (計2回)
 
-紛らわしい名前をしているが，[ソース](https://github.com/pemsley/coot/blob/cffbb2e5262899b2fcfd1f6858ba7be36c396d0d/python/user_define_restraints.py#L167)を読む限り，塩基の原子間距離の制約を設定しているだけなので，A formやB formになるわけではない．
+で設定できる．紛らわしい名前をしているが，[ソース](https://github.com/pemsley/coot/blob/8711a215318fdd934ddc745cfbe56a83e31362c0/python/user_define_restraints.py#L159)を読む限り，塩基の原子間距離の制約を設定しているだけなので，A formやB formになるわけではない（主鎖の制約ではない）．
+
+スタッキングは，
+
+1. Restraints - Add Parallel Planes Restraintを選択
+2. スタッキングさせたい残基を1つずつクリック (計2回)
+
+で塩基平面の並行性を保つ制約が設定できる．実装は上記ソースから `user_defined_add_planes_restraint()` を参照．
+
+この方法だとDNA-RNA heteroduplexの塩基対を組ませることができない．この機能自体変えてもらうほうが良いように思うが，とりあえず以下のスクリプトを適当な名前で保存してCalculate - Run Scriptから実行すればRestraintsメニューに"base pair restraints"が出現するので，これで組めるようになるはず．
+
+```py
+# original: https://github.com/pemsley/coot/blob/refinement/python/user_define_restraints.py
+
+def add_base_restraint(imol, spec_1, spec_2, atom_name_1, atom_name_2, dist):
+    add_extra_bond_restraint(imol,
+                           spec_1[2],
+                           spec_1[3],
+                           spec_1[4],
+                           atom_name_1,
+                           spec_1[6],
+                           spec_2[2],
+                           spec_2[3],
+                           spec_2[4],
+                           atom_name_2,
+                           spec_2[6],
+                           dist, 0.035)
+def a_u_restraints(spec_1, spec_2):
+    imol = spec_1[1]
+    add_base_restraint(imol, spec_1, spec_2, " N6 ", " O4 ", 3.12)
+    add_base_restraint(imol, spec_1, spec_2, " N1 ", " N3 ", 3.05)
+    add_base_restraint(imol, spec_1, spec_2, " C2 ", " O2 ", 3.90)
+    add_base_restraint(imol, spec_1, spec_2, " N3 ", " O2 ", 5.12)
+    add_base_restraint(imol, spec_1, spec_2, " C6 ", " O4 ", 3.92)
+    add_base_restraint(imol, spec_1, spec_2, " C4 ", " C6 ", 8.38)
+def g_c_restraints(spec_1, spec_2):
+    imol = spec_1[1]
+    add_base_restraint(imol, spec_1, spec_2, " N6 ", " O4 ", 3.12)
+    add_base_restraint(imol, spec_1, spec_2, " N1 ", " N3 ", 3.04)
+    add_base_restraint(imol, spec_1, spec_2, " N2 ", " O2 ", 3.14)
+    add_base_restraint(imol, spec_1, spec_2, " C4 ", " N1 ", 7.73)
+    add_base_restraint(imol, spec_1, spec_2, " C5 ", " C5 ", 7.21)
+def user_defined_base_pair():
+    res_name_from_atom_spec = lambda x: residue_name(*x[1:5])
+    def make_restr(*args):
+        spec_1 = args[0]
+        spec_2 = args[1]
+        res_name_1 = res_name_from_atom_spec(spec_1)
+        res_name_2 = res_name_from_atom_spec(spec_2)
+        print("DEBUG:: have resnames", res_name_1, res_name_2)
+        if (res_name_1 in ("G", "DG") and res_name_2 in ("C", "DC")):
+            g_c_restraints(spec_1, spec_2)
+        if (res_name_1 in ("C", "DC") and res_name_2 in ("G", "DG")):
+            g_c_restraints(spec_2, spec_1)
+        if (res_name_1 in ("A", "DA") and res_name_2 in ("U", "DT")):
+            a_u_restraints(spec_1, spec_2)
+        if (res_name_1 in ("U", "DT") and res_name_2 in ("A", "DA")):
+            a_u_restraints(spec_2, spec_1)
+    user_defined_click_py(2, make_restr)
+
+menu = coot_menubar_menu("Restraints")
+add_simple_coot_menu_menuitem(menu, "base pair restraints...", lambda func: user_defined_base_pair())
+```
+
 
 ## 二重らせんのフィッティング
 TBA
