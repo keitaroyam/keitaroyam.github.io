@@ -70,9 +70,9 @@ add_refmac_extra_restraints(imol, "libg.txt")
 1. Restraints - Add Parallel Planes Restraintを選択
 2. スタッキングさせたい残基を1つずつクリック (計2回)
 
-で塩基平面の並行性を保つ制約が設定できる．実装は上記ソースから `user_defined_add_planes_restraint()` を参照．
+で塩基平面の平行性を保つ制約が設定できる．実装は上記ソースから `user_defined_add_planes_restraint()` を参照．
 
-この方法だとDNA-RNA heteroduplexの塩基対を組ませることができない．この機能自体変えてもらうほうが良いように思うが，とりあえず以下のスクリプトを適当な名前で保存してCalculate - Run Scriptから実行すればRestraintsメニューに"base pair restraints"が出現するので，これで組めるようになるはず．
+この方法だとDNA-RNA heteroduplexの塩基対を組ませることができない．この機能自体変えてもらうほうが良いように思うが，とりあえず以下のスクリプトを適当な名前(.py)で保存してCalculate - Run Scriptから実行すればRestraintsメニューに"base pair restraints"が出現するので，これで組めるようになるはず．
 
 ```py
 # original: https://github.com/pemsley/coot/blob/refinement/python/user_define_restraints.py
@@ -127,9 +127,51 @@ menu = coot_menubar_menu("Restraints")
 add_simple_coot_menu_menuitem(menu, "base pair restraints...", lambda func: user_defined_base_pair())
 ```
 
-
 ## 二重らせんのフィッティング
-TBA
+
+1. モデルを置きたい場所の中心あたりに移動
+2. Calculate - Other Modelling Tools - DNA & RNA modelsを選択
+3. RNA/DNA, A/B form, double strandedを選択し配列を入力
+4. モデルが出現するので，Morph - Jiggle-fit This Molecule (Simple)を実行．マップにはまればOK．はまらなければ何度か繰り返す．ダメなときはRotate Translate Zoneで場所を動かす（回転は全探索されるので問題ない）
+
+(Morphメニューが無いときはFile - CurlewからMorphをインストールする．Refineメニューもこのあとで使うので，無い場合はChain Refineもインストールする)
+
+大まかにモデルが合ったら，精密化する．分解能が十分良いな普通にすれば問題ないが，分解能が悪いときは以下の方法で行う方が良い．
+
+まず構造を極力維持させるために，self-restraintsを設定する
+
+1. Calculate - Modules - Restraints でRestraintsメニューを出現させる
+2. Generate All-Molecule Self Restraints 4.3
+
+もし二重らせんモデルを既存のモデルにマージした上で行いたい場合は，マージ後，Calculate - Scripting - Pythonから
+
+```py
+chains = ["A", "B"]
+imol = 0
+all_res = sum([residues_in_chain(imol, x) for x in chains], [])
+generate_local_self_restraints_by_residues(imol, all_res, 4.3)
+```
+
+とする．chainsのIDは二重らせんのものに，imolはその分子番号(Display Managerから確認)に置き換えること．
+
+次に実際に精密化．特に電顕SPAのマップのときは，最初にWeightを適切に調整すること．
+右上のR/RCボタンからRefinement Weight横のEstimateボタンを押し，実際に適当な場所でsphere refine等を行ってから"Bonds:"の値が0.5-1.0程度に収まるところを探す（この精密化はキャンセルすること）．
+また，self-restraintsのGeman-McClure alpha (More Controlにあり)はデフォルトが0.01だが，R/RCを開くまでは1になっている罠があるので注意．
+
+モデルをマージしていなければ，Refine - All-atom Refineする．マージ済みで二重らせんだけrefineしたいときは，Calculate - Scripting - Pythonから
+
+```py
+refine_residues(imol, all_res)
+```
+
+とする（上記のscriptでall_resを設定済みの前提．必要なときは上のscriptの1-3行目をもう一度実行する）．
+もしモデルが変形しすぎるときは上記Geman-McClure alphaを小さくする．逆に，もう少し変形して欲しいときは大きくする．
+
+### 二重らせんモデルの理想化
+
+上記の方法で置くCootの二重らせんモデルは，実はあまり理想的な状態ではない（なお，以前はIdeal RNAみたいな名前だったが，それを指摘したらIdealの名前だけ削られてしまった）．
+モデルをもう少し理想化してから精密化することも可能である．
+要望があり次第書きます．
 
 ## フラグメントのフィッティング
 
