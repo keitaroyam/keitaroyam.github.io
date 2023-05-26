@@ -141,7 +141,7 @@ add_simple_coot_menu_menuitem(menu, "base pair restraints...", lambda func: user
 まず構造を極力維持させるために，self-restraintsを設定する
 
 1. Calculate - Modules - Restraints でRestraintsメニューを出現させる
-2. Generate All-Molecule Self Restraints 4.3
+2. Restraints - Generate All-Molecule Self Restraints 4.3
 
 もし二重らせんモデルを既存のモデルにマージした上で行いたい場合は，マージ後，Calculate - Scripting - Pythonから
 

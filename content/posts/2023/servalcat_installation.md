@@ -20,7 +20,7 @@ python -mpip install -U seravalcat
 
 ## Github最新版
 Github最新版 (パッケージ版に未収録)をインストールする場合，Github Actionsで自動ビルドされたバイナリを使うことができる．
-1. https://github.com/keitaroyam/servalcat/actions/workflows/ci.yml の一番上の項目をクリック
+1. https://github.com/keitaroyam/servalcat/actions/workflows/ci.yml のworkflow runsのうち，最新のrunをクリック
 2. Artifactsから"wheels2"をダウンロード
 3. zipを解凍し，以下のコマンドを実行． `wheels2`はzipの中身が展開された場所(ディレクトリ)の名前
 ```sh
