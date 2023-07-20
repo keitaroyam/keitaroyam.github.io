@@ -10,8 +10,35 @@ tags: [ccp4]
 リリースノートに記載されてないアップデートも実際にはあるのがCCP4 update.
 実際にどのファイルが変わったのかは $CCP4/restore/update.log に記録されています．
 
+## 8.0.013
+2023-07-20公開
+
+pandasのバージョンが0.24.1から1.1.5に．
+
+### Refmac5.8.0419
+
+http://fg.oisin.rc-harwell.ac.uk/scm/loggerhead/refmac/5.8/revision/482
+
+1. 一部の水素だけを精密化したときにcalc_flagが全部"."になってしまっていた問題の修正
+2. 水素原子のADP restraintで親原子のBに対する因子を調節可能に
+3. Windowsでrefmacat動かない(make cr prepared時に動かない)問題の修正
+
+2について補足．ADP精密化では近隣の原子のBとの差が小さくなるように制約されますが，水素の場合についてのみ，制約関数内部において親原子のB値をスケールできるようになりました
+```
+hydrogen bvalue factor <value>
+hydrogen bvalue factor polar <value>
+hydrogen bvalue factor nonpolar <cvalue> 
+```
+
+SHELXLも似たようなことをしていて，例えば親原子のU値の1.2倍に拘束するといったことをしますが，Refmacの場合は拘束ではなく制約という違いです．
+
+### acedrg 276
+
+芳香族性の情報のみから（水素原子なしで）構造を生成するときのバグ修正とかそんな感じ（あやふや）
+
+
 ## 8.0.012
-2023-06-14?公開
+2023-06-13公開
 
 ### Refmac5.8.0415
 
@@ -20,7 +47,6 @@ http://fg.oisin.rc-harwell.ac.uk/scm/loggerhead/refmac/5.8/revision/478
 1. van der Waals, ion半径の調節が可能に
 2. refmacatの場合にexternal restraintsのchain IDが正しくinstructionから読めていなかった問題の修正 (exte nonb, exte harm)
 3. exte harm chai.. の指定が機能していなかった(exte harm atin chai...とする必要があった)ので修正
-<!--4. 一部の水素だけを精密化したときにcalc_flagが全部"."になってしまっていた問題の修正-->
 
 1について補足．これはカリウムの反発問題に対するとりあえずの修正です．
 カリウムのvdwrは大きく，ener_lib.cifには2.75 Åとして定義されています．
