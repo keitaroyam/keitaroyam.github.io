@@ -1,7 +1,6 @@
 ---
 title: "SHELXCのoutlier rejectionについて"
 date: 2023-07-29T22:54:53+01:00
-draft: true
 math: true
 ---
 
