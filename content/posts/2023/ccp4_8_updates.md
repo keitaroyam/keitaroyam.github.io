@@ -10,6 +10,33 @@ tags: [ccp4]
 リリースノートに記載されてないアップデートも実際にはあるのがCCP4 update.
 実際にどのファイルが変わったのかは $CCP4/restore/update.log に記録されています．
 
+## 8.0.014
+2023-08-15公開
+
+### acedrg 277
+
+Link作成時に結合をDELETEした際，その結合周りのbond angle restraintsなどが適切に削除されていなかった問題の修正
+
+### Coot 0.9.8.91
+
+https://www.mail-archive.com/coot@jiscmail.ac.uk/msg05544.html  
+https://www.mail-archive.com/coot@jiscmail.ac.uk/msg05536.html
+
+以下に書いた通り，RNA-タンパク複合体問題がついに解決．ただしad-hocな方法のままです．これDNA-SERとかで問題になるんじゃないだろうか…
+
+あとはReplace residue的な機能でchain IDが変わってしまうバグも直ったらしい（たぶん10年以上存在していた）．
+
+### servalcat 0.4.32
+
+https://github.com/keitaroyam/servalcat/releases/tag/v0.4.32
+
+CCP4的に重要な修正は，LINKヘッダに存在しない原子が記述されていた場合にクラッシュしてしまう問題の修正．これでRefmacatの機能が問題なく使えるはず．ModelCraftはすでにrefmacatを使用．
+
+一部で宣伝していた，refine\_xtal\_norefmacで低分子を精密化するとき大きめにrandomiseしてもちゃんと収束する性能が残念ながら失われてしまった．
+これはADP restraintの方式を変えたせい．いちおう `--adp_restraint_mode diff --adpr_weight 3.5` で以前の挙動に戻せる．
+自分で実装してはじめて，ADP restraintsが実は収束性能にかなり重要ということを知った．
+
+
 ## 8.0.013
 2023-07-20公開
 

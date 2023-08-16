@@ -7,20 +7,7 @@ ShowToc: true
 
 順次追記予定
 
----
-注: 現在最新版のCoot 0.9.8.8および0.9.8.7 (CCP4 8.0.008-12)は核酸-タンパク複合体の精密化に深刻なバグあり．0.9.8.6は核酸単体でもダメです．核酸を含む精密化をやるときは0.9.8.5を使ってください（ただしこのバージョンは糖鎖がダメです）．
-
-あるいは以下の方法で回避可能です．[こちら]({{<ref "ccp4_8_updates.md#coot-0988" >}})で解説したようにAA-RNAリンクが悪さをしているので， `$CLIBD_MON/list/mon_lib_list.cif` (CCP4パッケージに含まれるmonomer libraryを使用している場合) の中の
-```
-AA-RNA . DEL-OXT peptide . DEL_HO3p DNA/RNA aminoacyl-RNA
-```
-を
-```
-#AA-RNA . DEL-OXT peptide . DEL_HO3p DNA/RNA aminoacyl-RNA
-```
-という感じでコメントアウトすれば使えるようになります．ただしアミノアシルtRNAの結合が作れなくなるので注意してください．
-
----
+注: Coot 0.9.8.9以上 (CCP4 8.0.014以上)を使ってください．0.9.8.6は核酸単体，0.9.8.7-8は核酸-タンパク複合体の精密化に[深刻なバグ]({{<ref "ccp4_8_updates.md#coot-0988" >}})があります．
 
 ## base pair & stacking restraints
 ### LIBGを使う
