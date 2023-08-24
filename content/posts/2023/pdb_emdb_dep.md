@@ -42,7 +42,7 @@ bond angleはsigmaが異様に小さい場合があり，そういう場合は�
 例えばARGのNE-CZ-NH1角は，PDBの理想値は120.3±0.5となっているが，[CCP4 monomer library](https://github.com/MonomerLibrary/monomers/blob/0710be469f381e44eeb2b97d21d8c322f24512e1/a/ARG.cif#L164)では120.1±1.5である．このため，例えばモデルの値が117.6だったとき，CCP4的には1.7σの残差だが，PDB的には5.4σも理想値からずれていることになり，怒られる．どちらのsigmaが妥当かは分からないが，0.5°は厳しすぎる．
 
 ### ARGがplane outlierになる
-後で別記事を書きます
+[別記事を書きました]({{<ref "arg_torsion.md" >}})
 
 ### EM (単粒子)のモデルvalidation
 入力したrecommended contour levelに基づいて行われるが，それがそもそもおかしい．
