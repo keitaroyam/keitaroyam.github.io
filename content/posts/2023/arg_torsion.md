@@ -8,6 +8,7 @@ tags: [coot, refinement]
 ## monomer libraryとtorsion angle
 CCP4 monomer libraryにはねじれ角(torsion angle)の理想値・周期・標準偏差が記述されています．
 例えばARGの定義は https://github.com/MonomerLibrary/monomers/blob/master/a/ARG.cif にありますが，現時点でのtorsion angle restraintsを眺めてみると，以下のようになっています．
+ARGの構造と原子名の対応については[RCSB PDB - ARG Ligand Summary Page](https://www.rcsb.org/ligand/arg)でLabelsボタンを押して確認してください．
 ```star
 loop_
 _chem_comp_tor.comp_id
