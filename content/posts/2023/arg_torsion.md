@@ -54,21 +54,33 @@ $$
 
 ## Cootにおける制約
 
-次にCootですが，ある時からCootは個別のσの値を使わなくなってしまいました．Cootのtorsion angle restraintは以下の式で行っているようです(nは周期)．
+次にCootですが，ある時からCootは個別のσの値を使わなくなってしまいました．Torsion angle restraintをONにしたとき，信号色と一緒に表示されるscoreは以下の式で計算されます([ver 0.9.8.92時点](https://github.com/pemsley/coot/blob/d0ff45f118b2d1f519c0ba748a53e9725f883ed3/ideal/distortion.cc#L1465))
 $$
-{\rm torsion\\_restraint\\_weight} \times 11 \times \frac{1-\cos{n (\theta\_{\rm model} - \theta\_{\rm ideal})}}{2}
+\sqrt{\frac{1}{N}\sum\_j^N 11 w \frac{1-\cos{n\_j (\theta\_{{\rm model},j} - \theta\_{{\rm ideal},j})}}{2}}
 $$
+ここで$n$は周期，$w$は内部変数torsion\_restraint\_weightで，ソースコード上では個別の値を設定できるようになっていますが，実際は全体で1つの値であり，set\_torsion\_restraints\_weight()から変更できます．右端R/RCボタンからMore controlを出して，その中のTorsions weightからも調整できます．
 
-[ソースコード上](https://github.com/pemsley/coot/blob/58ccfeebc5f76e5e4373269c1fa510dec22e3a8d/ideal/distortion.cc#L1461)では個別のtorsion_restraint_weightを設定できるようになっていますが，これは実質全体で1つの値であり，set_torsion_restraints_weight()から変更できます．右端R/RCボタンからMore controlを出して，その中のTorsions weightからも調整できます．
 
-CootはRefmacと違って最小二乗ではありませんが，Δθが微小量の場合にTaylor展開すると
+ただし，なぜか[gradient計算のとき](https://github.com/pemsley/coot/blob/d0ff45f118b2d1f519c0ba748a53e9725f883ed3/ideal/gradients.cc#L1285)は11倍されず，以下の式で寄与が計算されます．
 $$
-\sigma^2=\frac{4}{11 \times {\rm weight}}
+w \frac{1-\cos{n\_j (\theta\_{{\rm model},j} - \theta\_{{\rm ideal},j})}}{2}
 $$
-となるのでデフォルトのweight = 1はσ = 34.6°に対応し．weight = 12でσ = 10°，weight = 48でσ = 5°相当ということになります．
+ここで，Δθが微小量の場合にTaylor展開して最小二乗の形($w=1$)と比較すると，
+$$
+\frac{(\Delta \theta)^2}{2\sigma^2} \approx w \frac{(n\Delta \theta\frac{\pi}{180})^2}{4}
+$$
+となるので，換算式は
+$$
+\sigma = \frac{1}{n} \sqrt{\frac{6565.613}{w}}
+$$
+または
+$$
+w = \frac{6565.613}{\sigma^2 n^2}
+$$
+となります．周期nによって強さが変わってしまうのがややこしいですね．sp2\_sp2の場合は$n = 2$なので，σ = 5°相当にするにはw = 65ということになります．
 
 Cootではtorsion angle restraintsはデフォルトでOFFです．
-また，ONにしてもweight = 1ではかなりゆるい事になるので，実質あまり機能しないと思われます．
+また，ONにしてもweight = 1では比較的ゆるい事になるので，実質あまり機能しないと思われます．
 これが実際かなり問題であるわけです．二重結合性のねじれ角は強めに制約しないといけないのに，それができません．
 weightをきつくしてしまうと，他のねじれ角まで強くなってしまいます．大問題です！
 
@@ -118,6 +130,10 @@ ARG plan-3 NH2 0.020
 ```
 としてやります．ただしこれだと制約が強すぎるので，CD原子が同一平面にほぼ来てしまいます．特に高分解能の精密化をしてるときは気をつけてください．そのあとでRefmac等を流せば緩和されるとは思いますが．
 
+別解としては，sigmaの小さいtorsion angle以外を消してしまう手も考えられます．
+Edit - Restraintsから残基名を選び，Torsionsから必要ないものを消します．
+毎回これをやるのも大変なので，そういったcif fileを用意して読ませるほうが楽かもしれません．
+
 ## PDB validationにおけるArgの平面問題
 
 Coot/RefmacでrefineしたモデルをPDB登録したら，やたらARGの平面が悪いと怒られた経験があるかも知れません．
@@ -126,3 +142,13 @@ Coot/RefmacでrefineしたモデルをPDB登録したら，やたらARGの平面
 ただし，平面のrmsdに対して0.07 Åという基準は，わりと甘めではあります．厳密な関係はありませんが，chi5のdeviationで言うと約15°に相当します．
 現状のchi5のsigma (5°)から考えると15°というのは3σなので，3σ程度のdeviationはまあまあ起きるだろうという感じですが，そもそもこのsigmaの値は適切なのだろうかという疑問はあります．
 低分子の統計では標準偏差は5°より大きいようですが，高分子の精密化ではもっと小さくしたほうが良いかも知れません．グループ内でも議論してる途中です．
+
+## torsion angle restraintsの是非と難しさ
+
+二重結合のtorsion angleのようなほぼ確かである場合を除いて，torsion angleに関するrestraintを導入するのはやや危険な行為です．
+そもそも構造解析は，torsion angleつまりコンフォメーションを実験的に決定することが目的の一つとも言えます．
+Ramachandran restraintやrotamer restraintもtorsion angle restraintの一種ですが，outlierが出ないように強く制約するのは非常に邪悪な行為です．
+残念ながら，PDBの最近の（特にSPA）構造の多くはすでに汚染されてしまっています．
+
+二重結合の場合の理想値はほぼ確かであると言いましたが，ここにも少し難しさはあります．エチレンのような単純な場合ならともかく，分子中の二重結合または二重結合性を持つ結合は，周囲の状況によって少し歪むこともよくあります．
+Argのchi5はまさにその一つです．化学に基づいて適切に理想値・標準偏差を設定することが望ましいですが，現状AceDRGでそういうことはできていません．
