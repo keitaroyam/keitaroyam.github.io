@@ -20,11 +20,14 @@ date: 2023-07-19
 決めておくべきこと・調べておくべきこと
 
 * contact author全員のORCiD
+  * PDB/EMDBと連絡を取る人+PIのみ．公開されない
 * Entry title & authors
-* Funding
+  * Surname, F.M.形式で書く
+* Funding (organisationとnumber)
 * unreleasedに載せるか隠すか
 * 分子ごとのmolecule name
 * 配列（タグの切れ残り等含め，凍結した試料に含まれた配列全部）
+  * モデルと配列が一致していることを確認しておく．食い違っていると進めない
 * sourceとexpression host
 * 各マップのrecommended contour level (モデルのvalidationにも使われる)
 * グリッド作製時のpH, 冷媒，defocus範囲 (nm), 電顕と検出器の型，Average electron dose

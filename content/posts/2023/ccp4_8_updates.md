@@ -2,6 +2,7 @@
 title: "CCP4 8.0アップデートまとめ"
 date: 2023-06-14
 tags: [ccp4]
+ShowToc: true
 ---
 
 私の興味範囲のみのまとめです．
@@ -9,6 +10,37 @@ tags: [ccp4]
 
 リリースノートに記載されてないアップデートも実際にはあるのがCCP4 update.
 実際にどのファイルが変わったのかは $CCP4/restore/update.log に記録されています．
+
+## 8.0.016
+2023-10-05公開
+
+### Coot 0.9.8.92
+
+https://www.mail-archive.com/coot@jiscmail.ac.uk/msg05575.html
+
+前回のad hocな解決方法ではDNA-SERやdisulfでも問題が起きることが分かったので，ついに[ちゃんとした修正](https://github.com/pemsley/coot/commit/7e2518b1452f18d011db43b57210bce71cfa41e5)が入りました．
+一部まだ挙動が怪しいようですが．
+
+### monomer library
+
+https://github.com/MonomerLibrary/monomers/commits/ccp4-8.0.016
+
+1. ホスホジエステル結合(p)にtorsion angle alphaが抜けていたので追加 [#33](https://github.com/MonomerLibrary/monomers/pull/33)
+2. Acedrg 278で20種のアミノ酸を更新 [#32](https://github.com/MonomerLibrary/monomers/pull/32)
+3. すでにCCD (PDBの低分子ライブラリ)に存在しないエントリを削除 [#30](https://github.com/MonomerLibrary/monomers/pull/30)
+4. gemmi 0.6.0以前でエラーになる項目を修正 [#29](https://github.com/MonomerLibrary/monomers/pull/29)
+
+2.は一部のアミノ酸でねじれ角に不適切な理想値が設定されてしまっていた問題の修正です．特にMETやLEUなど．chi\*の名前はREFMACでも使われるので，ちょっと大きな問題でした．同時に，nucleus distanceも最新のテーブルの値になっています．
+
+4.の件，そんな古いgemmi誰も使ってないだろうと思ってたんですが，[ccpem 1.6 (現状の安定版)でいまだにgemmi 0.5.3が使われている](https://www.jiscmail.ac.uk/cgi-bin/wa-jisc.exe?A2=ind2308&L=CCPEM&O=D&P=35596)ことが判明しました．
+つまりccpem + ccp4最新版ではしばらく構造精密化が動かないままだったということに．．
+何だかあんまりな話ですが，とりあえず今回の修正で解決されます．
+
+
+## 8.0.015
+2023-08-16公開
+
+cloud関連の更新のみ
 
 ## 8.0.014
 2023-08-15公開
