@@ -11,6 +11,31 @@ ShowToc: true
 リリースノートに記載されてないアップデートも実際にはあるのがCCP4 update.
 実際にどのファイルが変わったのかは $CCP4/restore/update.log に記録されています．
 
+## 8.0.017
+2024-01-18公開
+
+### Refmac 5.8.0425
+
+http://fg.oisin.rc-harwell.ac.uk/scm/loggerhead/refmac/5.8/revision/487
+
+1. 残基数の最大値を50000から100000に
+2. symmetry related external bond distanceが正しく機能しないバグを修正
+
+LINKヘッダに書く順序で認識されたりされなかったりするバグが発生しており，直っていない．Refmacatを使えば問題なし．
+
+### CCP4i2
+
+Refmac5インタフェースでRefmacatが使われるようになり，[中性子構造の精密化](https://doi.org/10.1107/S2059798323008793)のインタフェースが追加された．
+
+残念ながらServalcatが古いままで，最近行った様々なバグ修正が反映されてない．
+[Windowsでgemmi 0.6.4が正しく動かないバグ](https://github.com/dials/dials/pull/2578)が見つかったことが原因．
+
+### doubleHelix
+
+新プログラム
+https://doi.org/10.1093/nar/gkad553
+
+
 ## 8.0.016
 2023-10-05公開
 
