@@ -13,16 +13,19 @@ C++側からもPython側からもGEMMIが必要なため，(Pythonライブラ�
 ## パッケージ版
 上述のように，
 ```sh
-python -mpip install -U seravalcat
+python -mpip install -U servalcat
 ```
 で入るはず．ただしここでビルドが始まった場合(= 環境に合う配布バイナリが無かった)は，一見うまくいってもGEMMIを配布バイナリからインストールしてる場合は動かない．
 下記の「自分でビルドする場合」を参照．
 
 ## Github最新版
 Github最新版 (パッケージ版に未収録)をインストールする場合，Github Actionsで自動ビルドされたバイナリを使うことができる．
+Githubにログインした状態でないとダウンロードできないので注意．
+
 1. https://github.com/keitaroyam/servalcat/actions/workflows/ci.yml のworkflow runsのうち，最新のrunをクリック
 2. Artifactsから"wheels2"をダウンロード
 3. zipを解凍し，以下のコマンドを実行． `wheels2`はzipの中身が展開された場所(ディレクトリ)の名前
+
 ```sh
 python -mpip install -U --find-links=wheels2/ servalcat
 ```
