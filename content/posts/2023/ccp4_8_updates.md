@@ -11,6 +11,34 @@ ShowToc: true
 リリースノートに記載されてないアップデートも実際にはあるのがCCP4 update.
 実際にどのファイルが変わったのかは $CCP4/restore/update.log に記録されています．
 
+## 8.0.018
+2024-04-03公開
+
+新しいServalcatが入るはずでしたが，GEMMIのビルドシステム変更のためにGEMMIのバージョンを上げられず，
+最新のGEMMIを必要とするServalcatも次のCCP4メジャーアップデートまで見送りとなりました．
+このためAcedrgのアップデートも見送りとなりました．
+既知のバグが直ってないままになるのは残念だけど仕方ない．早く次のバージョンが出ますように
+
+### Coot 0.9.8.93
+
+https://www.mail-archive.com/coot@jiscmail.ac.uk/msg05645.html
+
+* Mutate Residue RangeでDNAがRNAになってしまう問題の修正
+* TYRのHH原子に関する問題の修正: https://github.com/pemsley/coot/commit/5b52df6509afd137d72c604a6dde1232fe6cff70
+
+### monomer library
+
+https://github.com/MonomerLibrary/monomers/commits/ccp4-8.0.018
+
+1. AX/RXを追加．phaserで使われる未知の異常散乱/実原子．なぜか今までのRefmacでは定義無しで動いていたらしい？ [#51](https://github.com/MonomerLibrary/monomers/pull/51)
+2. CCDにおける原子名の変更などを反映 [#44](https://github.com/MonomerLibrary/monomers/pull/44)
+3. TYRのhh1 (OHのねじれ角)が間違っていたのを修正 [#45](https://github.com/MonomerLibrary/monomers/pull/45)
+4. PROのNがsp2になってしまっていた問題の修正．すべてのP-peptideをプロトン化(NH2+)状態に [#38](https://github.com/MonomerLibrary/monomers/pull/38)
+5. B12の修正 [#41](https://github.com/MonomerLibrary/monomers/pull/41)
+6. PDBによるペプチド主鎖原子の修正を反映 [#40](https://github.com/MonomerLibrary/monomers/pull/40)
+7. Robbieによる修正 [#35](https://github.com/MonomerLibrary/monomers/pull/35)
+
+
 ## 8.0.017
 2024-01-18公開
 
