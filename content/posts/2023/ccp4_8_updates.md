@@ -11,6 +11,16 @@ ShowToc: true
 リリースノートに記載されてないアップデートも実際にはあるのがCCP4 update.
 実際にどのファイルが変わったのかは $CCP4/restore/update.log に記録されています．
 
+## 8.0.019
+2024-04-11公開
+
+### monomer library
+
+下記の問題のために古いバージョンに戻されてしまった
+
+https://github.com/keitaroyam/servalcat/issues/14
+
+
 ## 8.0.018
 2024-04-03公開
 
