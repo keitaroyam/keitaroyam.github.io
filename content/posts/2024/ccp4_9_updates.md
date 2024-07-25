@@ -11,6 +11,33 @@ ShowToc: true
 リリースノートに記載されてないアップデートも実際にはあるのがCCP4 update.
 実際にどのファイルが変わったのかは $CCP4/restore/update.log に記録されています．
 
+## 9.0.002
+2024-07-24公開
+
+### Refmac 5.8.0430 (rev 497)
+
+バージョン番号変わってませんが，mmcif/crdから\_struct_ncs_operから回転行列を読むときに，-1未満の数字があると行列の全要素が0になるバグが修正されています．例えば3cjiの31番目の要素が
+```
+31 generate 0.999999 -0.000494 0.000078 0 -0.000483 -0.999992 0.000166 179.67 0.000075 -0.000165 -1.000002 253.383
+```
+となっており，これが全部0になってしまうという問題．pdbからMTRIXを読む場合はもともと問題ありませんでした．
+Refmacatの場合はcrd (cif)を経由するので，この問題の影響を受けてしまってました．
+
+### Servalcat 0.4.77
+
+https://github.com/keitaroyam/servalcat/releases/tag/v0.4.77
+
+refmacatに関する修正が主．
+* "given”のstrict NCS matrixを使わないように修正 (ただし出力ファイルから漏れてしまう問題が残ってる)
+* 出力mmcifのlabel_seq_idを修正
+* 未知のexternal restraint keywordがあると落ちる問題の修正(exte torsでperiodを指定した人がいて発覚)
+* unrestrained refinementのキーワードで大文字小文字の区別が入ってしまっていたので修正 + unrestrainedの場合でもcrdを経由するように修正
+* 出力mmcifのrefmac versionに(refmacat XXX)の記述を追記
+
+PDB側でもマップ生成にrefmacの代わりにrefmacatを使い始めたようで，unrestrained refinementに関する修正はその目的．
+unrestrained + 0 cycleなのでrefmacatの意味無いと思っていたが，refmac5に直接4icmのcifを読ませると落ちるなど問題がある模様．
+
+
 ## 9.0.001
 2024-07-16公開
 
@@ -27,6 +54,8 @@ https://www.mail-archive.com/coot@jiscmail.ac.uk/msg05701.html
 
 ### Servalcat 0.4.74
 
+https://github.com/keitaroyam/servalcat/releases/tag/v0.4.74
+
 refmacat的には，
 * exte指定でsymm指定があると無限ループに陥る問題の修正
 * 勝手にmetal linkを追加しないように修正 (make link y時のみ実行)
@@ -35,7 +64,13 @@ refmacat的には，
 ## 9.0.000
 2024-06-11公開
 
+Python 3.9．
+
 実質release candidate扱いで，次のminor updateで広くアナウンスするとのこと
+
+### DIALS 3.19
+
+CCP4 8.0がPython3.7だったのでずっとDIALS 3.8 (2022-01-11リリース)で止まっていたのが，ついに最新版に更新．
 
 ### Acedrg 293
 

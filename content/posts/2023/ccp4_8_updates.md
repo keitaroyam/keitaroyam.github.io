@@ -6,7 +6,7 @@ ShowToc: true
 ---
 
 私の興味範囲のみのまとめです．
-公式情報: https://www.ccp4.ac.uk/?page_id=3088
+公式情報: https://www.ccp4.ac.uk/ccp4-8-0-updates/
 
 リリースノートに記載されてないアップデートも実際にはあるのがCCP4 update.
 実際にどのファイルが変わったのかは $CCP4/restore/update.log に記録されています．
