@@ -6,10 +6,42 @@ ShowToc: true
 ---
 
 私の興味範囲のみのまとめです．
-公式情報: ?
+公式情報: https://www.ccp4.ac.uk/ccp4-8-0-updates/
 
 リリースノートに記載されてないアップデートも実際にはあるのがCCP4 update.
 実際にどのファイルが変わったのかは $CCP4/restore/update.log に記録されています．
+
+## 9.0.004
+2024-10-19公開
+
+### Acedrg 298 (rev 330)
+
+* link作成時にplane/torsionの名前が重複する問題の修正
+* デフォルトのmonomer IDがUNLからLIGに変更
+* 金属含有化合物への対応(途中)
+
+### Servalcat 0.4.88
+
+https://github.com/keitaroyam/servalcat/releases/tag/v0.4.88
+
+refmacatで `--keep_entities` 指定されたときにinputのentityをoutputにもそのままコピーするように変更 (PDB-REDOからのリクエスト)．
+
+## 9.0.003
+2024-08-19公開
+
+### Servalcat 0.4.82
+
+https://github.com/keitaroyam/servalcat/releases/tag/v0.4.82
+
+refmacatに関しては，unrestrained refinementのときに未知のlink idがあると止まってしまうバグを修正．
+もう一つ，352dのP/156のようなaltlocで原子の組成が異なるモデルに対してうまくいかないバグがあり，これはgemmi側で修正済みなので次のバージョンから対応される．
+これでPDBの構造に対してunrestrained refinementは全部うまくいくはず．
+
+あとはtwin refinementの実装を追加 (experimental)
+
+### Mosflm
+
+mosaicity計算のバグが修正された．レポジトリの方でコミットが見つからない．．
 
 ## 9.0.002
 2024-07-24公開
