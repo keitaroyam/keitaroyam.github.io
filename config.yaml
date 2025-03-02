@@ -27,3 +27,8 @@ menu:
       name: search
       url: /search/
       weight: 20
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
