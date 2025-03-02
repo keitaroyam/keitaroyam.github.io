@@ -11,12 +11,49 @@ ShowToc: true
 リリースノートに記載されてないアップデートも実際にはあるのがCCP4 update.
 実際にどのファイルが変わったのかは $CCP4/restore/update.log に記録されています．
 
+## 9.0.006
+2025-02-18公開
+
+### Acedrg 314 (rev 363)
+
+1. metal関係の修正
+2. pdb fileを再び出力するようになった
+3. chiral signの決定方法の調整 (_chem_comp_bond.pdbx_stereo_configを見るように)
+4. sp2/sp3の判定方法の調整
+
+2に関して．本来PDBファイルでの座標出力は必要ない (cifに含まれてる座標をPyMOL等で表示できるし，CootではImport Cif dictionaryしてからGet Monomerすれば良い)のだけど，あまりにも多くの人が無くて困ると言い出したということで，復活することになった．
+
+3は，[ccp4bb: Jeffamine dictionary](https://www.mail-archive.com/ccp4bb@jiscmail.ac.uk/msg57473.html) の投稿を受けて．ただCCDのpdbx_stereo_config値をいつも信用して良いわけでは無さそう．また新たな混乱が起こるか…？
+
+4は，下記にあるようにHECの辞書を作り直すときに水素が1つだけ付いた(HECとしてそのまま結合できる)状態を作るために-1のchargeを与えて辻褄を合わせようとしたが，意図通りに動かなかったので修正してもらった．
+
+### monomer library
+
+https://github.com/MonomerLibrary/monomers/commits/ccp4-9.0.006
+
+1. metals.jsonの更新 [#57](https://github.com/MonomerLibrary/monomers/pull/57)
+2. CCD側の変更を反映 (水素原子関係) [#50](https://github.com/MonomerLibrary/monomers/pull/50)
+3. すべての金属含有化合物を更新 [#58](https://github.com/MonomerLibrary/monomers/pull/58) [#60](https://github.com/MonomerLibrary/monomers/pull/60)
+
+1はmetals.jsonが単に更新されたものだが，異常に小さいsigmaの値が含まれる場合があり注意が必要 (servalの更新が入るまで保留にしていた)．
+
+2は以前CCDの更新を反映させた際に水素原子をスルーしてたので今回修正．
+
+3ではついに金属含有化合物が一斉に更新された．HECは本来monomerとして登録されるべきではない間違ったものだが，とりあえずCoot等での利用のしやすさを考えて残した (HEMとCYSのlinkはCootがうまく認識しない)．
+
+### Servalcat 0.4.100
+
+https://github.com/keitaroyam/servalcat/releases/tag/v0.4.100
+
+0.4.99が入る予定だったが，twin refinementのやばすぎるバグを直した0.4.100を入れてもらった．metals.jsonのsigmaをcapするようになったこと，refmacatのmmcifに `_atom_site.auth_comp_id` や `entity_poly` が書かれるようになったのがCCP4的に重要な修正か．ccp4i2にNo refmac refinementのinterfaceも入った模様？
+
+
 ## 9.0.005
 2024-12-10公開
 
 ### Acedrg 306 (rev 347)
 
-* link
+* link作成のバグ修正 (動作しない状態になっていた)
 * 金属含有化合物への対応(途中)
 
 ## 9.0.004
